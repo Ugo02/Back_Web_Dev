@@ -18,8 +18,6 @@ fastify.get('/api/hello', async function handler (request, reply) {
   return { hello: 'world' }
 })
 
-const validUsername = 'stan'
-const validPassword = 'stan'
 
 fastify.post('/api/users', async function handler (request, reply) {
   const {username, password : clearPassword, email } = request.body; // Récupération des identifiants envoyés
@@ -53,7 +51,7 @@ function createJWT (){
 // Run the server!
 try {
   await connect()
-  await fastify.listen({ port })
+  await fastify.listen({ port, host:'0.0.0.0' })
 } catch (err) {
   fastify.log.error(err)
   process.exit(1)
