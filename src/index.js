@@ -1,5 +1,6 @@
 // Import the framework and instantiate it
 import Fastify from 'fastify'
+import cors from '@fastify/cors'
 import dotenv from 'dotenv'
 import User from './users/user-model.js'
 import { connect } from './db/connect.js'
@@ -12,6 +13,7 @@ const port = process.env.PORT
 const fastify = Fastify({
   logger: true
 })
+await fastify.register(cors)
 
 // Declare a route
 fastify.get('/api/hello', async function handler (request, reply) {
