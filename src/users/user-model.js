@@ -30,8 +30,8 @@ userSchema.set('toJSON', {
     }
 })
 
-userSchema.methods.comparePassword = function comparePassword(candidatePassword, cb){
-    return compareHash(candidatePassword, this.password)
-}
+userSchema.methods.comparePassword = function(candidatePassword) {
+    return compareHash(candidatePassword, this.password);
+};
 
 export default mongoose.model('User', userSchema)
