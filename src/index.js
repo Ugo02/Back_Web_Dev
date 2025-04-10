@@ -21,30 +21,26 @@ fastify.post('/api/token', tokenHandler);
 
 
 //Private routes 
-function authenticate(request, reply) {
+function authenticate(request, reply, done) {  
   try {
     const token = request.headers.authorization?.split(' ')[1];
     if (!token) {
       reply.code(401).send({ error: 'Unauthorized' });
-      return; // ⚠️ Important : arrête l'exécution !
+      return done(); 
     }
-    request.user = jwt.verify(token, process.env.JWT_SECRET); // Décode et attache l'user
-    // Pas de return ni de throw : laisse Fastify continuer vers le handler
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    request.user = decoded; 
+    done(); 
   } catch (err) {
     reply.code(401).send({ error: 'Unauthorized' });
-    // ⚠️ Ne pas throw ! Juste répondre avec 401.
+    return done(); 
   }
 }
 
-fastify.post('/api/movies', (request, reply) => {
-  authenticate(request, reply);
-  return createMovieHandler(request, reply);
-});
+fastify.post('/api/movies', { preHandler: authenticate}, createMovieHandler);
 
-fastify.get('/api/movies', (request, reply) => {
-  authenticate(request, reply);
-  return getMoviesHandler(request, reply);
-});
+fastify.get('/api/movies', { preHandler: authenticate }, getMoviesHandler);
 
 // Run the server!
 try {
