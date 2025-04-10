@@ -3,6 +3,8 @@ import cors from '@fastify/cors';
 import dotenv from 'dotenv';
 import { connect } from './db/connect.js';
 import { helloHandler, createUserHandler, tokenHandler, createMovieHandler, getMoviesHandler } from './handlers/handlers.js';
+import jwt from 'jsonwebtoken';
+
 
 dotenv.config();
 
