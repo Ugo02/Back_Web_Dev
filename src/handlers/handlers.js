@@ -1,5 +1,6 @@
 import { getHashFromClearText } from '../utils/crypto.js';
-import User from '../users/user-model.js';
+import User from '../models/user-model.js';
+import Movie from '../models/movie-model.js';
 import jwt from 'jsonwebtoken';
 
 export async function helloHandler(request, reply) {
@@ -46,4 +47,21 @@ function createJWT(user) {
       { expiresIn: '1h' }
     );
   }
+
+
+export async function createMovieHandler(request, reply) {
+  const { name, rating } = request.body;
+  const userId = request.user.id; // Fetch the JWT token
   
+  const movie = new Movie({ name, rating, userId });
+  await movie.save();
+  
+  return reply.status(201).send(movie);
+}
+
+export async function getMoviesHandler(request, reply) {
+  const userId = request.user.id;
+  const movies = await Movie.find({ userId }).sort({ rating: -1 }); // Sort by descending rating
+  
+  return movies;
+}
