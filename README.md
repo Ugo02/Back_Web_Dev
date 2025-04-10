@@ -17,6 +17,10 @@ This backend powers the frontend available at:
 Frontend GitHub repository:  
 [https://github.com/Ugo02/App_Web_Dev](https://github.com/Ugo02/App_Web_Dev)
 
+## 🚀 Deployment
+
+The backend is live on Render:  
+🔗 [https://back-web-dev.onrender.com](https://back-web-dev.onrender.com)
 
 ## 📂 Endpoints
 
