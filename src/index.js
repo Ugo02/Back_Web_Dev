@@ -24,13 +24,15 @@ fastify.post('/api/token', tokenHandler);
 function authenticate(request, reply) {
   try {
     const token = request.headers.authorization?.split(' ')[1];
-    if (!token) throw new Error('No token provided');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    request.user = decoded; 
-    return decoded;
+    if (!token) {
+      reply.code(401).send({ error: 'Unauthorized' });
+      return; // ⚠️ Important : arrête l'exécution !
+    }
+    request.user = jwt.verify(token, process.env.JWT_SECRET); // Décode et attache l'user
+    // Pas de return ni de throw : laisse Fastify continuer vers le handler
   } catch (err) {
     reply.code(401).send({ error: 'Unauthorized' });
-    throw err; 
+    // ⚠️ Ne pas throw ! Juste répondre avec 401.
   }
 }
 
